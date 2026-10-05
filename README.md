@@ -1,13 +1,13 @@
 <div align="center">
 
-  <img src="https://raw.githubusercontent.com/DrakesCraft-Labs/SaneCrafting-drake/main/banner.svg" alt="SaneCrafting-drake Banner" width="920" />
+  <img src="https://raw.githubusercontent.com/SlimefunNewHorizons/SaneCrafting-drake/main/banner.svg" alt="SaneCrafting-drake Banner" width="920" />
 
 # 🧪 SaneCrafting-Drake
 
 **Addon de Slimefun4 con Aceleración Nativa en Rust (Java 21 Project Panama FFM API)**
 
 <p>
-  <a href="https://github.com/DrakesCraft-Labs/SaneCrafting-drake"><img src="https://img.shields.io/badge/GitHub-SaneCrafting--Drake-181717?style=for-the-badge&logo=github" alt="GitHub"/></a>
+  <a href="https://github.com/SlimefunNewHorizons/SaneCrafting-drake"><img src="https://img.shields.io/badge/GitHub-SaneCrafting--Drake-181717?style=for-the-badge&logo=github" alt="GitHub"/></a>
   <img src="https://img.shields.io/badge/Java-21_FFM_Panama-F89820?style=for-the-badge&logo=openjdk&logoColor=white" alt="Java 21 FFM"/>
   <img src="https://img.shields.io/badge/Rust-FFM_Accelerated-FF4500?style=for-the-badge&logo=rust&logoColor=white" alt="Rust Native"/>
   <img src="https://img.shields.io/badge/Paper-1.21.11-38BDF8?style=for-the-badge&logo=minecraft&logoColor=white" alt="Paper 1.21.11"/>
@@ -63,7 +63,7 @@ de Slimefun: no hace falta ningún comando especial para empezar.
 |---|---|
 | Servidor | Paper / Purpur **1.21.11** |
 | Java | **21** |
-| Requiere | [Slimefun4-Drake](https://github.com/DrakesCraft-Labs/Slimefun4-Drake) |
+| Requiere | [Slimefun4-Drake](https://github.com/SlimefunNewHorizons/Slimefun4-Drake) |
 | Lado | Solo servidor — quien juega no instala nada |
 | Versión | 0.1 |
 
@@ -79,7 +79,7 @@ de Slimefun: no hace falta ningún comando especial para empezar.
 ## Créditos
 - Idra
 
-Port y mantenimiento por **DrakesCraft Labs**. La autoría original es de quien figura arriba; el detalle está en [docs/UPSTREAM_ATTRIBUTION.md](https://raw.githubusercontent.com/DrakesCraft-Labs/SaneCrafting-drake/main/docs/UPSTREAM_ATTRIBUTION.md).
+Port y mantenimiento por **DrakesCraft Labs**. La autoría original es de quien figura arriba; el detalle está en [docs/UPSTREAM_ATTRIBUTION.md](https://raw.githubusercontent.com/SlimefunNewHorizons/SaneCrafting-drake/main/docs/UPSTREAM_ATTRIBUTION.md).
 
 Licencia **MIT**.
 
@@ -87,7 +87,7 @@ Licencia **MIT**.
 
 ## 📄 License & Upstream Attribution
 
-This project is a sovereign fork maintained by [**JackStar6677-1**](https://github.com/JackStar6677-1) under [**DrakesCraft Labs**](https://github.com/DrakesCraft-Labs).
+This project is a sovereign fork maintained by [**JackStar6677-1**](https://github.com/JackStar6677-1) under [**DrakesCraft Labs**](https://github.com/SlimefunNewHorizons).
 
 - **Original Project:** Created by the upstream authors and the open-source community.
 - **DrakesCraft Optimizations:** Modernized for Paper/Purpur 1.21.11+, Java 21, high concurrency, asynchronous safety, and exploit/duplication prevention.
