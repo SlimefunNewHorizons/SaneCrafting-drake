@@ -2,7 +2,7 @@ package org.metamechanists.sanecrafting;
 
 
 import com.github.drakescraft_labs.labupdate.DrakesLabsReleaseUpdate;
-import com.github.drakescraft_labs.slimefun4.api.SlimefunAddon;
+import io.github.thebusybiscuit.slimefun4.api.SlimefunAddon;
 import org.bukkit.event.server.ServerLoadEvent;
 import lombok.Getter;
 import lombok.NonNull;
@@ -16,7 +16,7 @@ import org.metamechanists.sanecrafting.patches.CraftingTablePatch;
 import org.metamechanists.sanecrafting.patches.RecipeBookResearchPatch;
 import org.metamechanists.sanecrafting.patches.RecipeLorePatch;
 import org.metamechanists.sanecrafting.patches.UsableInWorkbenchPatch;
-import dev.drake.dough.updater.BlobBuildUpdater;
+import io.github.thebusybiscuit.slimefun4.libraries.dough.updater.GitHubBuildsUpdater;
 
 
 public final class SaneCrafting extends JavaPlugin implements SlimefunAddon {
@@ -31,7 +31,7 @@ public final class SaneCrafting extends JavaPlugin implements SlimefunAddon {
         instance = this;
 
         if (getConfig().getBoolean("auto-update") && !getPluginVersion().contains("MODIFIED")) {
-            new BlobBuildUpdater(this, getFile(), "SaneCrafting").start();
+            new GitHubBuildsUpdater(this, getFile(), "metamechanists/SaneCrafting/master").start();
         }
 
         new Metrics(this, BSTATS_ID);
