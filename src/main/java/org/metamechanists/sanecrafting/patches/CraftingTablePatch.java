@@ -122,11 +122,16 @@ public class CraftingTablePatch {
         }
 
         List<Runnable> conversions = new ArrayList<>();
+        int oversized = 0;
         for (int j = 0; j < recipes.size(); j += 2) {
             ItemStack[] input = recipes.get(j);
             ItemStack output = recipes.get(j + 1)[0];
             if (SlimefunItem.getByItem(output) == null) {
                 // Skip vanilla slimefunitem recipes for now
+                continue;
+            }
+            if (exceedsMaxStackSize(output)) {
+                oversized++;
                 continue;
             }
 
@@ -135,9 +140,17 @@ public class CraftingTablePatch {
 
         for (SlimefunItem item : Slimefun.getRegistry().getEnabledSlimefunItems()) {
             if (item instanceof VanillaItem vanillaItem && item.getRecipeType() == RecipeType.ENHANCED_CRAFTING_TABLE) {
+                if (exceedsMaxStackSize(vanillaItem.getRecipeOutput())) {
+                    oversized++;
+                    continue;
+                }
                 conversions.add(() -> convertVanillaRecipeSafely(vanillaItem));
             }
         }
+
+        SaneCrafting.getInstance().getLogger().info("Enhanced Crafting Table: " + recipes.size() / 2
+                + " recipes found, " + conversions.size() + " to convert, " + oversized
+                + " kept only in the Enhanced Crafting Table (output above max stack size)");
 
         if (conversions.isEmpty()) {
             completion.run();
@@ -158,6 +171,17 @@ public class CraftingTablePatch {
                 }
             }
         }.runTaskTimer(SaneCrafting.getInstance(), 1L, 1L);
+    }
+
+    /**
+     * A shaped recipe whose result exceeds the item's max stack size (e.g. 4 potions)
+     * cannot be materialised by the server: it logs "Can't create item stack" and
+     * breaks consumers that iterate recipes, such as EquivalencyTech's EMC pass.
+     * Such recipes stay craftable in the Enhanced Crafting Table instead of being
+     * clamped, so players never get a smaller yield.
+     */
+    static boolean exceedsMaxStackSize(ItemStack output) {
+        return output.getAmount() > output.getMaxStackSize();
     }
 
     private void convertRecipeSafely(List<ItemStack> input, ItemStack output) {
