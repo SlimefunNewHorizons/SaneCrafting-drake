@@ -129,13 +129,6 @@
             <scope>provided</scope>
         </dependency>
 
-            <dependency>
-                <groupId>com.github.drakescraft_labs</groupId>
-                <artifactId>drakes-labs-autoupdate</artifactId>
-                <version>11-SNAPSHOT</version>
-            </dependency>
-
-
             <!-- ProtocolLib -->
             <dependency>
                 <groupId>com.github.dmulloy2</groupId>
@@ -354,11 +347,6 @@
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
             <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>com.github.drakescraft_labs</groupId>
-            <artifactId>drakes-labs-autoupdate</artifactId>
         </dependency>
 
         <dependency>
