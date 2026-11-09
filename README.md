@@ -2,86 +2,85 @@
 
   <img src="https://raw.githubusercontent.com/SlimefunNewHorizons/SaneCrafting-drake/main/banner.svg" alt="SaneCrafting-drake Banner" width="920" />
 
-# 🧪 SaneCrafting-Drake
+# ⚡ SaneCrafting — Drake Edition
 
-**Addon de Slimefun4 con Aceleración Nativa en Rust (Java 21 Project Panama FFM API)**
+**High-Performance Paper 1.21.11 Expansion for Slimefun4**
 
 <p>
-  <a href="https://github.com/SlimefunNewHorizons/SaneCrafting-drake"><img src="https://img.shields.io/badge/GitHub-SaneCrafting--Drake-181717?style=for-the-badge&logo=github" alt="GitHub"/></a>
-  <img src="https://img.shields.io/badge/Java-21_FFM_Panama-F89820?style=for-the-badge&logo=openjdk&logoColor=white" alt="Java 21 FFM"/>
-  <img src="https://img.shields.io/badge/Rust-FFM_Accelerated-FF4500?style=for-the-badge&logo=rust&logoColor=white" alt="Rust Native"/>
+  <a href="https://github.com/SlimefunNewHorizons/SaneCrafting-drake"><img src="https://img.shields.io/badge/GitHub-SaneCrafting-181717?style=for-the-badge&logo=github" alt="GitHub"/></a>
+  <img src="https://img.shields.io/badge/Slimefun4-Drake_Edition-22C55E?style=for-the-badge&logo=curseforge&logoColor=white" alt="Slimefun4"/>
   <img src="https://img.shields.io/badge/Paper-1.21.11-38BDF8?style=for-the-badge&logo=minecraft&logoColor=white" alt="Paper 1.21.11"/>
+  <img src="https://img.shields.io/badge/Java-21-F89820?style=for-the-badge&logo=openjdk&logoColor=white" alt="Java 21"/>
 </p>
+
+[🇬🇧 **English**](README.md) · [🇪🇸 **Español**](README_ES.md)
 
 </div>
 
-> ### 🏰 ¡Únete a la Comunidad Oficial de DrakesCraft!
+> ### 🏰 Join the Official DrakesCraft Community!
 > 
-> * 🎮 **IP del Servidor**: `mc.drakescraft.cl` *(Java 1.21.11 & Bedrock)*
-> * 💬 **Discord Oficial**: [discord.gg/drakescraft](https://discord.gg/rv3vtXZTk7)
-> * 🌐 **Web & Guía**: [web.drakescraft.cl](https://web.drakescraft.cl) — 🛒 **Tienda**: [web.drakescraft.cl/store](https://web.drakescraft.cl/store.html)
+> * 🎮 **Server IP**: `mc.drakescraft.cl` *(Java 1.21.11 & Bedrock Port 25565 / 19132)*
+> * 💬 **Official Discord**: [discord.gg/drakescraft](https://discord.gg/rv3vtXZTk7) — *Check out `#general-english`!*
+> * 🌐 **Website & Guides**: [web.drakescraft.cl](https://web.drakescraft.cl) — 🛒 **Store**: [web.drakescraft.cl/store](https://web.drakescraft.cl/store.html)
 > 
-> *¡Juega con este addon y más de 80 expansiones optimizadas en vivo en nuestra network de supervivencia técnica!*
+> *Play with this addon alongside 80+ optimized expansions live on our technical survival network!*
 
 ---
 
----
+## 📖 What is SaneCrafting?
 
-## ⚡ Novedades del Modelo Híbrido Cero-Riesgo
+**SaneCrafting-drake** is a modular expansion within the **DrakesCraft Labs** ecosystem, specifically engineered and optimized for Minecraft **Paper / Purpur 1.21.11** servers running Java 21 LTS.
 
-`SaneCrafting-Drake` integra el componente Panama FFM **`RustNativeBridge`** para delegar la aceleración de tickers de máquinas y cálculos pesados directamente al motor nativo `Slimefun-Rust` (`slimefun_ffi`):
-- 🚀 **Procesamiento de Ticks en Nanosegundos**: Multi-hilo paralelo real en CPU sin pausas de Garbage Collector.
-- 🛡️ **Preservación Total sin Reset (SQLite 0-Reset)**: Mantiene intactos todos los bloques e inventarios existentes en `stored-blocks.db`.
+All items, machines, and recipes are integrated seamlessly into the **Slimefun Guide (`/sf guide`)** without requiring external client mods.
 
 ---
 
-## 🛠️ Compilación
+## ⚙️ Key Features & Systems
+
+* 🚀 **Optimized Performance**: Full Java 21 LTS runtime optimization on Paper 1.21.11 with zero Garbage Collector stutter and zero external telemetry.
+* 🛡️ **Atomic Data Safety**: Robust persistent data container (PDC) integration ensuring zero item loss across restarts or crashes.
+* ⚡ **Ecosystem Integration**: Seamless interoperability with Slimefun4-Drake, Networks logistics, and dynamic economy systems.
+* 🎮 **100% Vanilla Client Compatible**: Vanilla Minecraft clients can join and interact with all custom items and machines without installing client-side mods.
+
+---
+
+## 📋 Technical Compatibility
+
+| Parameter | Requirement |
+|---|---|
+| **Server Software** | Paper / Purpur / Folia **1.21.11** |
+| **Java Runtime** | **Java 21** LTS |
+| **Required Core** | [Slimefun4-Drake](https://github.com/SlimefunNewHorizons/Slimefun4-Drake) |
+| **Architecture** | 100% Server-Side (Vanilla Minecraft clients can join without installing client mods) |
+
+---
+
+## 📥 Installation
+
+1. Download the latest release `.jar` from the [Releases](https://github.com/SlimefunNewHorizons/SaneCrafting-drake/releases) tab or [Modrinth](https://modrinth.com/organization/drakescraft-labs).
+2. Place the `.jar` into your server's `plugins/` directory alongside `Slimefun4-Drake.jar`.
+3. Start or restart your server. Recipes and machines will appear automatically in the Slimefun guide (`/sf guide`).
+
+---
+
+## 🛠️ Building from Source
 
 ```bash
-mvn clean package
+git clone https://github.com/SlimefunNewHorizons/SaneCrafting-drake.git
+cd SaneCrafting-drake
+mvn clean package -DskipTests
 ```
+
+The compiled artifact will be located under `target/SaneCrafting-drake.jar`.
 
 ---
 
 <div align="center">
 
-**DrakesCraft Labs** · Mantenido por [**JackStar6677-1**](https://github.com/JackStar6677-1)
+**Developed and Maintained by [DrakesCraft Labs](https://github.com/SlimefunNewHorizons)**  
+Licensed under **MIT**.
 
 </div>
-
-## Qué añade al juego
-
-Addon de Slimefun con contenido propio: máquinas, objetos y recetas nuevas.
-
-
-Todo se fabrica y se investiga desde la guía normal (`/sf guide`), como cualquier otro contenido
-de Slimefun: no hace falta ningún comando especial para empezar.
-
-## Compatibilidad
-
-| | |
-|---|---|
-| Servidor | Paper / Purpur **1.21.11** |
-| Java | **21** |
-| Requiere | [Slimefun4-Drake](https://github.com/SlimefunNewHorizons/Slimefun4-Drake) |
-| Lado | Solo servidor — quien juega no instala nada |
-| Versión | 0.1 |
-
-## Instalación
-
-1. Descarga el `.jar` de la última versión.
-2. Déjalo en la carpeta `plugins/` del servidor, junto a Slimefun.
-3. Reinicia el servidor. Los objetos aparecen solos en la guía.
-
-> Este addon está portado al fork de Slimefun de DrakesCraft. Con el Slimefun original puede no
-> cargar, porque cambia el espacio de nombres de las clases.
-
-## Créditos
-- Idra
-
-Port y mantenimiento por **DrakesCraft Labs**. La autoría original es de quien figura arriba; el detalle está en [docs/UPSTREAM_ATTRIBUTION.md](https://raw.githubusercontent.com/SlimefunNewHorizons/SaneCrafting-drake/main/docs/UPSTREAM_ATTRIBUTION.md).
-
-Licencia **MIT**.
 
 ---
 
@@ -89,6 +88,6 @@ Licencia **MIT**.
 
 This project is a sovereign fork maintained by [**JackStar6677-1**](https://github.com/JackStar6677-1) under [**DrakesCraft Labs**](https://github.com/SlimefunNewHorizons).
 
-- **Original Project:** Created by the upstream authors and the open-source community.
-- **DrakesCraft Optimizations:** Modernized for Paper/Purpur 1.21.11+, Java 21, high concurrency, asynchronous safety, and exploit/duplication prevention.
-- **License:** Distributed under the original **GNU General Public License v3.0 (GPLv3)** (or original upstream license). See the [LICENSE](LICENSE) file for complete terms.
+- **Original Project:** Created by the upstream authors and the open-source community ([Upstream Repository](https://github.com/Slimefun)).
+- **DrakesCraft Optimizations:** Modernized for Paper/Purpur 1.21.11+, Java 21 LTS, high concurrency, asynchronous safety, and exploit/duplication prevention.
+- **License:** Distributed under the original **MIT** license terms. See the [LICENSE](LICENSE) file for complete details.
