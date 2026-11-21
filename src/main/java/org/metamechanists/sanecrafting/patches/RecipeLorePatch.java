@@ -1,8 +1,6 @@
 package org.metamechanists.sanecrafting.patches;
 
-import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
 import io.github.thebusybiscuit.slimefun4.api.recipes.RecipeType;
-import io.github.thebusybiscuit.slimefun4.implementation.Slimefun;
 import io.github.thebusybiscuit.slimefun4.libraries.dough.items.CustomItemStack;
 import lombok.experimental.UtilityClass;
 import org.bukkit.Material;
@@ -23,19 +21,13 @@ public class RecipeLorePatch {
 
     public void apply() {
         try {
-            for (SlimefunItem item : Slimefun.getRegistry().getEnabledSlimefunItems()) {
-                if (!item.getRecipeType().equals(RecipeType.ENHANCED_CRAFTING_TABLE)) {
-                    continue;
-                }
+            Field recipeTypeItemField = RecipeType.class.getDeclaredField("item");
+            recipeTypeItemField.setAccessible(true);
+            recipeTypeItemField.set(RecipeType.ENHANCED_CRAFTING_TABLE, ITEMSTACK);
 
-                Field recipeTypeItemField = RecipeType.class.getDeclaredField("item");
-                recipeTypeItemField.setAccessible(true);
-                recipeTypeItemField.set(RecipeType.ENHANCED_CRAFTING_TABLE, ITEMSTACK);
-
-                Field recipeTypeKeyField = RecipeType.class.getDeclaredField("key");
-                recipeTypeKeyField.setAccessible(true);
-                recipeTypeKeyField.set(RecipeType.ENHANCED_CRAFTING_TABLE, KEY);
-            }
+            Field recipeTypeKeyField = RecipeType.class.getDeclaredField("key");
+            recipeTypeKeyField.setAccessible(true);
+            recipeTypeKeyField.set(RecipeType.ENHANCED_CRAFTING_TABLE, KEY);
         } catch (IllegalAccessException | IllegalArgumentException | SecurityException | NoSuchFieldException e) {
             SaneCrafting.getInstance().getLogger().info("Failed to apply ChangeRecipeTypePatch");
             e.printStackTrace();

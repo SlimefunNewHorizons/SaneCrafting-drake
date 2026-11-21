@@ -1,11 +1,15 @@
 package org.metamechanists.sanecrafting.patches;
 
+import org.bukkit.NamespacedKey;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class CraftingTablePatchTest {
@@ -52,5 +56,31 @@ class CraftingTablePatchTest {
         List<String> empty = new ArrayList<>(List.of("   ", "   ", "   "));
         CraftingTablePatch.trimShape(empty);
         assertTrue(empty.isEmpty());
+    }
+
+    @Test
+    void uniqueRecipeIdSuffixesDuplicatesDeterministically() {
+        Map<String, Integer> seen = new HashMap<>();
+        assertEquals("sanecrafting_obsidian_boots", CraftingTablePatch.uniqueRecipeId("sanecrafting_obsidian_boots", seen));
+        assertEquals("sanecrafting_obsidian_boots_2", CraftingTablePatch.uniqueRecipeId("sanecrafting_obsidian_boots", seen));
+        assertEquals("sanecrafting_obsidian_boots_3", CraftingTablePatch.uniqueRecipeId("sanecrafting_obsidian_boots", seen));
+        assertEquals("sanecrafting_other_item", CraftingTablePatch.uniqueRecipeId("sanecrafting_other_item", seen));
+    }
+
+    @Test
+    void hasStackedIngredientHandlesNullAndEmptyLists() {
+        assertFalse(CraftingTablePatch.hasStackedIngredient(null));
+        assertFalse(CraftingTablePatch.hasStackedIngredient(List.of()));
+        List<org.bukkit.inventory.ItemStack> nulls = new ArrayList<>();
+        nulls.add(null);
+        assertFalse(CraftingTablePatch.hasStackedIngredient(nulls));
+    }
+
+    @Test
+    void isSaneCraftingKeyMatchesOnlySaneCraftingNamespace() {
+        assertTrue(UsableInWorkbenchPatch.isSaneCraftingKey(new NamespacedKey("sanecrafting", "sanecrafting_elytra")));
+        assertFalse(UsableInWorkbenchPatch.isSaneCraftingKey(NamespacedKey.minecraft("iron_block")));
+        assertFalse(UsableInWorkbenchPatch.isSaneCraftingKey(new NamespacedKey("slimefun", "something")));
+        assertFalse(UsableInWorkbenchPatch.isSaneCraftingKey(null));
     }
 }

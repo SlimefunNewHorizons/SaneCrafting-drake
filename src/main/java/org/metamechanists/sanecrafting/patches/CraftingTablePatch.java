@@ -57,8 +57,8 @@ public class CraftingTablePatch {
             for (int x = 0; x < 3; x++) {
                 int i = y*3 + x;
                 char character = itemCharacters.charAt(i);
-                ItemStack itemStack = input.get(i);
-                if (itemStack == null) {
+                ItemStack itemStack = i < input.size() ? input.get(i) : null;
+                if (itemStack == null || itemStack.getType().isAir()) {
                     shape.set(y, shape.get(y).replace(character, ' '));
                 } else {
                     ingredients.put(character, itemStack);
@@ -147,7 +147,9 @@ public class CraftingTablePatch {
         }
 
         List<Runnable> conversions = new ArrayList<>();
+        Map<String, Integer> seenRecipeIds = new HashMap<>();
         int oversized = 0;
+        int stackedInputs = 0;
         for (int j = 0; j < recipes.size(); j += 2) {
             ItemStack[] input = recipes.get(j);
             ItemStack output = recipes.get(j + 1)[0];
@@ -159,8 +161,18 @@ public class CraftingTablePatch {
                 oversized++;
                 continue;
             }
+            List<ItemStack> inputList = Arrays.asList(input);
+            if (hasStackedIngredient(inputList)) {
+                stackedInputs++;
+                continue;
+            }
 
-            conversions.add(() -> convertRecipeSafely(Arrays.asList(input), output));
+            String baseId = generateRecipeId(output);
+            if (baseId == null) {
+                continue;
+            }
+            String recipeId = uniqueRecipeId(baseId, seenRecipeIds);
+            conversions.add(() -> convertRecipeSafely(recipeId, inputList, output));
         }
 
         for (SlimefunItem item : Slimefun.getRegistry().getEnabledSlimefunItems()) {
@@ -169,13 +181,20 @@ public class CraftingTablePatch {
                     oversized++;
                     continue;
                 }
-                conversions.add(() -> convertVanillaRecipeSafely(vanillaItem));
+                List<ItemStack> inputList = Arrays.asList(vanillaItem.getRecipe());
+                if (hasStackedIngredient(inputList)) {
+                    stackedInputs++;
+                    continue;
+                }
+                String recipeId = uniqueRecipeId(generateRecipeId(vanillaItem), seenRecipeIds);
+                conversions.add(() -> convertVanillaRecipeSafely(recipeId, vanillaItem));
             }
         }
 
         SaneCrafting.getInstance().getLogger().info("Enhanced Crafting Table: " + recipes.size() / 2
                 + " recipes found, " + conversions.size() + " to convert, " + oversized
-                + " kept only in the Enhanced Crafting Table (output above max stack size)");
+                + " kept only in the Enhanced Crafting Table (output above max stack size), "
+                + stackedInputs + " kept only in the Enhanced Crafting Table (stacked ingredient amount > 1)");
 
         if (conversions.isEmpty()) {
             completion.run();
@@ -209,9 +228,38 @@ public class CraftingTablePatch {
         return output.getAmount() > output.getMaxStackSize();
     }
 
-    private void convertRecipeSafely(List<ItemStack> input, ItemStack output) {
+    /**
+     * Vanilla {@link ShapedRecipe} only consumes 1 item per crafting slot regardless of
+     * the ingredient's {@link ItemStack#getAmount()}. Converting an Enhanced Crafting Table
+     * recipe that requires stacked ingredients (amount &gt; 1) would allow players to craft
+     * it in a regular Crafting Table for 1 item per slot. Keep such recipes in the Enhanced
+     * Crafting Table instead.
+     */
+    static boolean hasStackedIngredient(List<ItemStack> input) {
+        if (input == null) {
+            return false;
+        }
+        for (ItemStack item : input) {
+            if (item != null && !item.getType().isAir() && item.getAmount() > 1) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Generates a deterministic unique recipe ID within a single registration pass so
+     * multiple Enhanced Crafting Table recipes outputting the same item do not overwrite
+     * each other's {@link NamespacedKey}.
+     */
+    static String uniqueRecipeId(String baseId, Map<String, Integer> seenCounts) {
+        int count = seenCounts.merge(baseId, 1, Integer::sum);
+        return count == 1 ? baseId : baseId + "_" + count;
+    }
+
+    private void convertRecipeSafely(String recipeId, List<ItemStack> input, ItemStack output) {
         try {
-            convertRecipe(input, output);
+            convertRecipe(recipeId, input, output);
         } catch (RuntimeException e) {
             String name = PlainTextComponentSerializer.plainText().serialize(output.displayName());
             SaneCrafting.getInstance().getLogger().severe("Failed to convert Enhanced Crafting Table recipe for " + name);
@@ -219,9 +267,9 @@ public class CraftingTablePatch {
         }
     }
 
-    private void convertVanillaRecipeSafely(VanillaItem vanillaItem) {
+    private void convertVanillaRecipeSafely(String recipeId, VanillaItem vanillaItem) {
         try {
-            convertRecipe(generateRecipeId(vanillaItem), Arrays.asList(vanillaItem.getRecipe()), vanillaItem.getRecipeOutput());
+            convertRecipe(recipeId, Arrays.asList(vanillaItem.getRecipe()), vanillaItem.getRecipeOutput());
         } catch (RuntimeException e) {
             String name = PlainTextComponentSerializer.plainText().serialize(vanillaItem.getItem().displayName());
             SaneCrafting.getInstance().getLogger().severe("Failed to convert Enhanced Crafting Table recipe for " + name);
