@@ -66,35 +66,13 @@ public class CraftingTablePatch {
             }
         }
 
-        // Trim vertical
-        for (int y = shape.size() - 1; y >= 0; y--) {
-            if (Objects.equals(shape.get(y), "   ")) {
-                shape.remove(y);
-            }
-        }
+        // Trim empty outer rows/columns only — never strip interior empty rows/columns
+        // (e.g. boots ["d f", "g i"] must preserve the center gap, not collapse to ["df", "gi"]).
+        trimShape(shape);
 
         // Skip if no recipe (just in case)
-        if (shape.isEmpty()) {
+        if (shape.isEmpty() || shape.get(0).isEmpty()) {
             return;
-        }
-
-        // Trim horizontal
-        for (int x = shape.get(0).length() - 1; x >= 0; x--) {
-            boolean allRowsEmptyAtX = true;
-            for (int y = shape.size() - 1; y >= 0; y--) {
-                if (shape.get(y).charAt(x) != ' ') {
-                    allRowsEmptyAtX = false;
-                    break;
-                }
-            }
-            if (allRowsEmptyAtX) {
-                for (int y = shape.size() - 1; y >= 0; y--) {
-                    String newRow = new StringBuilder(shape.get(y))
-                            .deleteCharAt(x)
-                            .toString();
-                    shape.set(y, newRow);
-                }
-            }
         }
 
         ShapedRecipe recipe = new ShapedRecipe(key, output);
@@ -103,6 +81,53 @@ public class CraftingTablePatch {
             recipe.setIngredient(entry.getKey(), entry.getValue());
         }
         Bukkit.getServer().addRecipe(recipe);
+    }
+
+    static void trimShape(List<String> shape) {
+        // Trim leading and trailing empty rows only
+        while (!shape.isEmpty() && isRowEmpty(shape.get(0))) {
+            shape.remove(0);
+        }
+        while (!shape.isEmpty() && isRowEmpty(shape.get(shape.size() - 1))) {
+            shape.remove(shape.size() - 1);
+        }
+
+        if (shape.isEmpty()) {
+            return;
+        }
+
+        // Trim leading empty columns only
+        while (!shape.get(0).isEmpty() && isColumnEmpty(shape, 0)) {
+            for (int y = 0; y < shape.size(); y++) {
+                shape.set(y, shape.get(y).substring(1));
+            }
+        }
+
+        // Trim trailing empty columns only
+        while (!shape.get(0).isEmpty() && isColumnEmpty(shape, shape.get(0).length() - 1)) {
+            int lastCol = shape.get(0).length() - 1;
+            for (int y = 0; y < shape.size(); y++) {
+                shape.set(y, shape.get(y).substring(0, lastCol));
+            }
+        }
+    }
+
+    private boolean isRowEmpty(String row) {
+        for (int i = 0; i < row.length(); i++) {
+            if (row.charAt(i) != ' ') {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private boolean isColumnEmpty(List<String> shape, int col) {
+        for (String row : shape) {
+            if (row.charAt(col) != ' ') {
+                return false;
+            }
+        }
+        return true;
     }
 
     /**
