@@ -206,7 +206,9 @@ jobs:
               *"$VER_POM"*) COINCIDE=1 ;;
             esac
           done
-          if [ "$COINCIDE" -ne 1 ]; then
+          # Un jar sin version en el nombre (finalName fijo) no permite comparar: el build es del mismo job, asi que es valido.
+          CON_VERSION=0; for j in $JARS; do case "$(basename "$j")" in *[0-9].[0-9]*) CON_VERSION=1 ;; esac; done
+          if [ "$COINCIDE" -ne 1 ] && [ "$CON_VERSION" -eq 1 ]; then
             echo "::error::El nombre de ningun jar contiene la version del pom ($VER_POM)."
             echo "::error::Sube el cambio de version en pom.xml al repo antes de publicar, o el"
             echo "::error::build se publicara con una version equivocada."
