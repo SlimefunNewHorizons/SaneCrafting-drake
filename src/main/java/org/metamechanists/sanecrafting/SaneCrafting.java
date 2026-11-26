@@ -2,6 +2,7 @@ package org.metamechanists.sanecrafting;
 
 
 import com.github.drakescraft_labs.slimefun4.api.SlimefunAddon;
+import io.papermc.paper.event.server.ServerResourcesReloadedEvent;
 import org.bukkit.event.server.ServerLoadEvent;
 import lombok.Getter;
 import lombok.NonNull;
@@ -57,6 +58,13 @@ public final class SaneCrafting extends JavaPlugin implements SlimefunAddon {
                         }, 20L);
                     }
                 });
+            }
+
+            // /minecraft:reload and /datapack replace the RecipeManager map and drop Bukkit recipes:
+            // without re-registering them, joins log "Tried to load unrecognized recipe" and wipe our keys.
+            @EventHandler
+            public void onResourcesReloaded(ServerResourcesReloadedEvent e) {
+                CraftingTablePatch.applyBatched(RecipeBookResearchPatch::apply);
             }
         }, this);
 
