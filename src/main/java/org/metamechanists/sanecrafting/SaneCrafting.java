@@ -3,6 +3,7 @@ package org.metamechanists.sanecrafting;
 
 import io.github.thebusybiscuit.slimefun4.api.SlimefunAddon;
 import org.bukkit.event.server.ServerLoadEvent;
+import io.papermc.paper.event.server.ServerResourcesReloadedEvent;
 import lombok.Getter;
 import lombok.NonNull;
 import org.bstats.bukkit.Metrics;
@@ -56,6 +57,13 @@ public final class SaneCrafting extends JavaPlugin implements SlimefunAddon {
                         }, 20L);
                     }
                 });
+            }
+
+            // /minecraft:reload y /datapack reemplazan el RecipeManager y borran las recetas Bukkit:
+            // sin esto cada join registra "Tried to load unrecognized recipe" y las saca del libro.
+            @EventHandler
+            public void onResourcesReloaded(ServerResourcesReloadedEvent e) {
+                CraftingTablePatch.applyBatched(RecipeBookResearchPatch::apply);
             }
         }, this);
 

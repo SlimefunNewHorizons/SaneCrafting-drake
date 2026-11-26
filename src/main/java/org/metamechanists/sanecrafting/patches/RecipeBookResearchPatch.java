@@ -17,6 +17,8 @@ import org.jetbrains.annotations.NotNull;
 import org.metamechanists.sanecrafting.SaneCrafting;
 import org.metamechanists.sanecrafting.Util;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -30,7 +32,33 @@ public final class RecipeBookResearchPatch implements Listener {
         if (registered.compareAndSet(false, true)) {
             Bukkit.getServer().getPluginManager().registerEvents(new RecipeBookResearchPatch(), SaneCrafting.getInstance());
         }
+        // Restore recipe book keys for online players after batched registration or datapack reload.
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            rediscover(player);
+        }
         SaneCrafting.getInstance().getLogger().info("Applied RecipeBookResearch patch");
+    }
+
+    private static void rediscover(@NotNull Player player) {
+        boolean researching = Slimefun.getRegistry().isResearchingEnabled();
+        PlayerProfile profile = Slimefun.getRegistry().getPlayerProfiles().get(player.getUniqueId());
+        if (researching && profile == null) {
+            return;
+        }
+        List<NamespacedKey> keys = new ArrayList<>();
+        for (SlimefunItem item : Slimefun.getRegistry().getEnabledSlimefunItems()) {
+            if (researching && item.hasResearch() && !profile.hasUnlocked(item.getResearch())) {
+                continue;
+            }
+            String recipeId = Util.generateRecipeId(item.getItem());
+            if (recipeId != null) {
+                NamespacedKey key = new NamespacedKey(SaneCrafting.getInstance(), recipeId);
+                if (Bukkit.getServer().getRecipe(key) != null) {
+                    keys.add(key);
+                }
+            }
+        }
+        player.discoverRecipes(keys);
     }
 
     @EventHandler
